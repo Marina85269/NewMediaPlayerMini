@@ -1,20 +1,20 @@
 package com.example.newmediaplayermini
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.media.MediaPlayer
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.SeekBar
+import androidx.appcompat.app.AppCompatActivity
 
-import kotlin.system.measureNanoTime
-
-class MainActivity : AppCompatActivity() {
-    lateinit var runnable: Runnable
+public open class MainActivity : AppCompatActivity() {
+    private lateinit var runnable: Runnable
     private var handler = Handler()
-    @SuppressLint("MissingInflatedId", "SuspiciousIndentation")
+
+    @SuppressLint("MissingInflatedId", "SuspiciousIndentation", "WrongViewCast")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -22,11 +22,26 @@ class MainActivity : AppCompatActivity() {
         val mediaPlayer: MediaPlayer = MediaPlayer.create(this, R.raw.high_sky)
         val play_btn: ImageButton = findViewById(R.id.play_btn)
         val seekBar: SeekBar = findViewById(R.id.seekbar)
-
+        val buttonInfo: ImageButton = findViewById(R.id.buttonInfo)
+//        val prevSong: ImageButton = findViewById(R.id.prev)
 
         seekBar.progress = 0
         seekBar.max = mediaPlayer.duration
 
+        buttonInfo.setOnClickListener{
+            val intent = Intent(this@MainActivity, NextActivity::class.java)
+            startActivity(intent)
+        }
+
+        play_btn.setOnClickListener{
+            if(!mediaPlayer.isPlaying){
+                mediaPlayer.start()
+                play_btn.setImageResource(R.drawable.ic_pause)
+            } else {
+                mediaPlayer.pause()
+                play_btn.setImageResource(R.drawable.ic_play)
+            }
+        }
 
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, changed: Boolean) {
@@ -54,15 +69,15 @@ class MainActivity : AppCompatActivity() {
         seekBar.progress = 0
     }
 
-        play_btn.setOnClickListener{
-            if(!mediaPlayer.isPlaying){
-                mediaPlayer.start()
-                play_btn.setImageResource(R.drawable.ic_pause)
-            } else {
-                mediaPlayer.pause()
-                play_btn.setImageResource(R.drawable.ic_play)
-            }
-        }
+//        play_btn.setOnClickListener{
+//            if(!mediaPlayer.isPlaying){
+//                mediaPlayer.start()
+//                play_btn.setImageResource(R.drawable.ic_pause)
+//            } else {
+//                mediaPlayer.pause()
+//                play_btn.setImageResource(R.drawable.ic_play)
+//            }
+//        }
 
 
     }
